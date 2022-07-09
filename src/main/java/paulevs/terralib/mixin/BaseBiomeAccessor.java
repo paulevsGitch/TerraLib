@@ -11,4 +11,10 @@ public interface BaseBiomeAccessor {
 	
 	@Accessor("precipitates")
 	void setPrecipitation(boolean precipitates);
+	
+	@Accessor("hasSnow")
+	boolean getSnow();
+	
+	@Accessor("hasSnow")
+	void setSnow(boolean snow);
 }
