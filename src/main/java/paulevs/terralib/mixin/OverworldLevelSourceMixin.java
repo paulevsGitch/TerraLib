@@ -68,7 +68,9 @@ public class OverworldLevelSourceMixin {
 		short minSection = (short) ChunkSectionPos.getSectionCoord(minY);
 		short maxSection = (short) ChunkSectionPos.getSectionCoord(minY + height);
 		
+		BlockState dirt = ((BlockStateHolder) BaseBlock.DIRT).getDefaultState();
 		BlockState stone = ((BlockStateHolder) BaseBlock.STONE).getDefaultState();
+		BlockState grass = ((BlockStateHolder) BaseBlock.GRASS).getDefaultState();
 		
 		customPool.submit(() -> IntStream.range(minSection, maxSection).parallel().forEach(n -> {
 			ChunkSection section = sections[n];
@@ -114,13 +116,41 @@ public class OverworldLevelSourceMixin {
 						a = MathUtil.lerp(a, b, dz);
 						b = MathUtil.lerp(c, d, dz);
 						
-						a = MathUtil.lerp(a, b, dy);
+						c = MathUtil.lerp(a, b, dy);
 						
-						if (a > 0) section.setBlockState(x, y, z, stone);
+						//if (a > 0) section.setBlockState(x, y, z, stone);
+						if (c > 0) {
+							c = MathUtil.lerp(a, b, dy + 0.25F);
+							if (c > 0) {
+								c = MathUtil.lerp(a, b, dy + 0.75F);
+								section.setBlockState(x, y, z, c > 0 ? stone : dirt);
+							}
+							else {
+								section.setBlockState(x, y, z, grass);
+							}
+						}
 					}
 				}
 			}
+			
+			if (section.isEmpty()) sections[n] = null;
 		}));
+		
+		/*customPool.submit(() -> IntStream.range(minSection, maxSection).parallel().forEach(n -> {
+			ChunkSection section = sections[n];
+			if (section != null) {
+				ChunkSection below = n > minSection ? sections[n - 1] : null;
+				for (byte x = 0; x < 16; x++) {
+					for (byte z = 0; z < 16; z++) {
+						for (byte y = 0; y < 16; y++) {
+							if (section.getBlockState(x, y, z) == stone) {
+							
+							}
+						}
+					}
+				}
+			}
+		}));*/
 	}
 	
 	@Inject(method = "shapeChunk(II[B[Lnet/minecraft/level/biome/BaseBiome;[D)V", at = @At("HEAD"), cancellable = true)

@@ -56,6 +56,9 @@ public abstract class TerraBiomeSource  extends BiomeSource {
 	
 	public TerrainSDF getSDF(int x, int z) {
 		fillCache(x, z, (byte) 16);
+		if (BIOME_CACHE.size() == 1) {
+			return BIOME_CACHE.keySet().iterator().next().getTerrainSDF();
+		}
 		SDF.clear();
 		BIOME_CACHE.forEach((biome, count) -> SDF.add(biome.getTerrainSDF(), count / 1089.0F));
 		return SDF;

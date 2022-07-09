@@ -13,6 +13,6 @@ public class FlatSDF extends TerrainSDF {
 	
 	@Override
 	public float getDensity(Level level, Vec3I pos) {
-		return height - pos.y;
+		return (height - pos.y) * 0.0625F;
 	}
 }
