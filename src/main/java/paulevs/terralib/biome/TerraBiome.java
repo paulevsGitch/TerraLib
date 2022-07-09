@@ -19,12 +19,18 @@ public class TerraBiome extends BaseBiome {
 	private TerraBiome parentBiome;
 	private TerraBiome edgeBiome;
 	private int edgeSize = 16;
+	private float temperature;
 	private int fogColor;
 	private int skyColor;
 	
 	public TerraBiome(Identifier id) {
 		subBiomes.add(this, 1F);
+		setName(id.id);
 		this.id = id;
+	}
+	
+	public TerraBiome(BaseBiome source) {
+		this(Identifier.of(source.name), source);
 	}
 	
 	public TerraBiome(Identifier id, BaseBiome source) {
@@ -62,6 +68,15 @@ public class TerraBiome extends BaseBiome {
 	
 	public TerraBiome setSnow(boolean snow) {
 		access().setSnow(snow);
+		return this;
+	}
+	
+	public float getTemperature() {
+		return temperature;
+	}
+	
+	public TerraBiome setTemperature(float temperature) {
+		this.temperature = temperature;
 		return this;
 	}
 	
