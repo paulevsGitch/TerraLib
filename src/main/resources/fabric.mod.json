@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "terralib",
+	"version": "${version}",
+
+	"name": "TerraLib",
+	"description": "Library for biomes and terrain",
+	"authors": [
+		"paulevs"
+	],
+	"contact": {
+		"sources": "https://github.com/paulevsGitch/TerraLib",
+		"issues": "https://github.com/paulevsGitch/TerraLib/issues",
+		"discord": "https://discord.gg/qxcP8EjkUC"
+	},
+
+	"license": "MIT",
+	"icon": "assets/terralib/icon.png",
+
+	"environment": "*",
+	"mixins": [
+		"terralib.mixins.json"
+	],
+
+	"depends": {
+		"minecraft": "1.0.0-beta.7.3",
+		"stationapi": "*"
+	}
+}

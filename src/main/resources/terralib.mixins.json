@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "paulevs.terralib.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"BaseBiomeAccessor"
+	],
+	"client": [],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
