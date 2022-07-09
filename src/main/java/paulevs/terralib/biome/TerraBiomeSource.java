@@ -6,13 +6,22 @@ import net.minecraft.level.biome.BaseBiome;
 import net.minecraft.level.gen.BiomeSource;
 import net.minecraft.util.maths.Vec2i;
 import paulevs.bhcore.storage.vector.Vec3F;
+import paulevs.terralib.sdf.MixSDF;
+import paulevs.terralib.sdf.TerrainSDF;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class TerraBiomeSource  extends BiomeSource {
 	private static final Map<TerraBiome, Integer> BIOME_CACHE = new HashMap<>();
+	private static final MixSDF SDF = new MixSDF();
 	private static final Vec3F RGB = new Vec3F();
+	
+	public TerraBiomeSource() {
+		this.temperatureNoises = new double[256];
+		this.rainfallNoises = new double[256];
+		this.detailNoises = new double[256];
+	}
 	
 	public abstract TerraBiome getTerraBiome(double x, double z);
 	
@@ -32,7 +41,7 @@ public abstract class TerraBiomeSource  extends BiomeSource {
 		fillCache(x, z, (byte) 3);
 		RGB.set(0, 0, 0);
 		BIOME_CACHE.forEach((biome, count) -> {
-			int rgb = biome.grassColor;
+			int rgb = biome.getGrassColor();
 			float r = ((rgb >> 16) & 255) / 255.0F;
 			float g = ((rgb >> 8) & 255) / 255.0F;
 			float b = (rgb & 255) / 255.0F;
@@ -43,6 +52,13 @@ public abstract class TerraBiomeSource  extends BiomeSource {
 		int g = (int) (RGB.y * 255);
 		int b = (int) (RGB.z * 255);
 		return r << 16 | g << 8 | b;
+	}
+	
+	public TerrainSDF getSDF(int x, int z) {
+		fillCache(x, z, (byte) 16);
+		SDF.clear();
+		BIOME_CACHE.forEach((biome, count) -> SDF.add(biome.getTerrainSDF(), count / 1089.0F));
+		return SDF;
 	}
 	
 	@Override

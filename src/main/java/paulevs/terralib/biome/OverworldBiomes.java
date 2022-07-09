@@ -2,12 +2,13 @@ package paulevs.terralib.biome;
 
 import paulevs.terralib.TerraLib;
 import paulevs.terralib.map.BiomePicker;
+import paulevs.terralib.sdf.FlatSDF;
 
 public class OverworldBiomes {
 	public static final BiomePicker OCEAN_PICKER = new BiomePicker();
 	public static final BiomePicker LAND_PICKER = new BiomePicker();
 	
-	public static final TerraBiome OCEAN = new TerraBiome(TerraLib.id("ocean"));
+	public static final TerraBiome OCEAN = new TerraBiome(TerraLib.id("ocean")).setTemperature(0.5F).setGrassColor(0xFF00FF).setTerrainSDF(new FlatSDF().setHeight(32));
 	
 	public static void addLandBiome(TerraBiome biome, float weight) {
 		LAND_PICKER.addBiome(biome, weight);

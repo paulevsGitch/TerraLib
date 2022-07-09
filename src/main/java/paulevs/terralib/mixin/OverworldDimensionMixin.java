@@ -9,6 +9,6 @@ import paulevs.terralib.biome.OverworldBiomeSource;
 public class OverworldDimensionMixin extends BaseDimension {
 	@Override
 	protected void initBiomeSource() {
-		biomeSource = new OverworldBiomeSource(level.getSeed(), 32);
+		biomeSource = new OverworldBiomeSource(level.getSeed(), 64);
 	}
 }

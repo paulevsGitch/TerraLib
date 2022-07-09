@@ -4,6 +4,7 @@
 	"package": "paulevs.terralib.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
+		"OverworldLevelSourceMixin",
 		"OverworldDimensionMixin",
 		"BiomeColoursMixin",
 		"BaseBiomeAccessor"

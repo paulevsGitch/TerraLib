@@ -8,6 +8,7 @@ import paulevs.terralib.mixin.BaseBiomeAccessor;
 import paulevs.terralib.sdf.FlatSDF;
 import paulevs.terralib.sdf.TerrainSDF;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class TerraBiome extends BaseBiome {
@@ -30,7 +31,7 @@ public class TerraBiome extends BaseBiome {
 	}
 	
 	public TerraBiome(BaseBiome source) {
-		this(Identifier.of(source.name), source);
+		this(Identifier.of(source.name.toLowerCase(Locale.ROOT)), source);
 	}
 	
 	public TerraBiome(Identifier id, BaseBiome source) {
@@ -59,6 +60,15 @@ public class TerraBiome extends BaseBiome {
 	public TerraBiome setSkyColor(int skyColor) {
 		this.skyColor = skyColor;
 		return this;
+	}
+	
+	public TerraBiome setGrassColor(int color) {
+		super.setGrassColor(color);
+		return this;
+	}
+	
+	public int getGrassColor() {
+		return grassColor;
 	}
 	
 	public TerraBiome setPrecipitation(boolean precipitation) {

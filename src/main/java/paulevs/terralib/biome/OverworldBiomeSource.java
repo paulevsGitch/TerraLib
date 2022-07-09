@@ -15,13 +15,10 @@ public class OverworldBiomeSource extends TerraBiomeSource {
 		this.landNoise = new OpenSimplexNoise(random.nextLong());
 		this.oceanMap = new BiomeMap(random.nextLong(), biomeSize, OverworldBiomes.OCEAN_PICKER);
 		this.landMap = new BiomeMap(random.nextLong(), biomeSize, OverworldBiomes.LAND_PICKER);
-		this.temperatureNoises = new double[256];
-		this.rainfallNoises = new double[256];
-		this.detailNoises = new double[256];
 	}
 	
 	@Override
 	public TerraBiome getTerraBiome(double x, double z) {
-		return landNoise.eval(x * 0.1, z * 0.1) > 0 ? landMap.getBiome(x, z) : oceanMap.getBiome(x, z);
+		return landNoise.eval(x * 0.01, z * 0.01) > 0 ? landMap.getBiome(x, z) : oceanMap.getBiome(x, z);
 	}
 }
