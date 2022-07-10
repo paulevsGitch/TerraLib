@@ -1,6 +1,7 @@
 package paulevs.terralib.map;
 
 import paulevs.terralib.biome.TerraBiome;
+import paulevs.terralib.map.picker.BiomePicker;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -20,19 +21,21 @@ public class BiomeChunk {
 	
 	private final TerraBiome[] biomes = new TerraBiome[SIZE];
 	
-	public BiomeChunk(Random random, BiomePicker picker) {
+	public BiomeChunk(Random random, BiomePicker picker, int cx, int cz) {
 		TerraBiome[][] buffers = new TerraBiome[2][SIZE];
 		
 		for (TerraBiome[] buffer: buffers) {
 			Arrays.fill(buffer, null);
 		}
 		
+		int sx = cx << SIDE_PRE_MASK;
+		int sz = cz << SIDE_PRE_MASK;
 		for (byte index = 0; index < SIZE_PRE; index++) {
 			byte px = (byte) (index >> SIDE_PRE_OFFSET);
 			byte pz = (byte) (index & SIDE_PRE_MASK);
 			px = (byte) (px * SCALE_PRE + random.nextInt(SCALE_PRE));
 			pz = (byte) (pz * SCALE_PRE + random.nextInt(SCALE_PRE));
-			circle(buffers[0], getIndex(px, pz), picker.getBiome(random), null);
+			circle(buffers[0], getIndex(px, pz), picker.getBiome(sx + px, sz + pz, random), null);
 		}
 		
 		boolean hasEmptyCells = true;
@@ -73,7 +76,7 @@ public class BiomeChunk {
 		
 		for (short index = 0; index < SIZE; index++) {
 			if (outBuffer[index] == null) {
-				outBuffer[index] = picker.getBiome(random);
+				fixNull(outBuffer, index);
 			}
 			else if (random.nextInt(4) == 0) {
 				circle(outBuffer, index, outBuffer[index].getSubBiome(random), outBuffer[index]);
@@ -92,6 +95,17 @@ public class BiomeChunk {
 			short index = (short) (center + i);
 			if (index >= 0 && index < SIZE && buffer[index] == mask) {
 				buffer[index] = biome;
+			}
+		}
+	}
+	
+	private void fixNull(TerraBiome[] buffer, short center) {
+		short[] neighbours = getNeighbours(center & SIDE_MASK);
+		for (short i: neighbours) {
+			short index = (short) (center + i);
+			if (index >= 0 && index < SIZE && buffer[index] != null) {
+				buffer[center] = buffer[index];
+				return;
 			}
 		}
 	}

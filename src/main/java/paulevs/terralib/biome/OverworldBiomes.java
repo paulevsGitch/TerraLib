@@ -1,25 +1,25 @@
 package paulevs.terralib.biome;
 
+import paulevs.bhcore.storage.WeightedList;
 import paulevs.terralib.TerraLib;
-import paulevs.terralib.map.BiomePicker;
 import paulevs.terralib.sdf.FlatSDF;
 import paulevs.terralib.sdf.MaxSDF;
 import paulevs.terralib.sdf.TerrainSDF;
 import paulevs.terralib.sdf.VanillaTerrainSDF;
 
 public class OverworldBiomes {
-	public static final BiomePicker OCEAN_PICKER = new BiomePicker();
-	public static final BiomePicker LAND_PICKER = new BiomePicker();
+	public static final WeightedList<TerraBiome> OCEAN_BIOMES = new WeightedList();
+	public static final WeightedList<TerraBiome> LAND_BIOMES = new WeightedList();
 	public static final TerrainSDF OVERWORLD_GEN;
 	
 	public static final TerraBiome OCEAN = new TerraBiome(TerraLib.id("ocean")).setTemperature(0.5F).setGrassColor(0xFF00FF).setTerrainSDF(new FlatSDF().setHeight(32));
 	
 	public static void addLandBiome(TerraBiome biome, float weight) {
-		LAND_PICKER.addBiome(biome, weight);
+		LAND_BIOMES.add(biome, weight);
 	}
 	
 	public static void addOceanBiome(TerraBiome biome, float weight) {
-		OCEAN_PICKER.addBiome(biome, weight);
+		OCEAN_BIOMES.add(biome, weight);
 	}
 	
 	static {

@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 import paulevs.bhcore.noise.OpenSimplexNoise;
 import paulevs.terralib.biome.TerraBiome;
+import paulevs.terralib.map.picker.BiomePicker;
 
 import java.util.Map;
 import java.util.Random;
@@ -71,7 +72,7 @@ public class BiomeMap {
 		BiomeChunk chunk = chunks.get(pos);
 		if (chunk == null) {
 			Random random = new Random(MathHelper.hashCode(cx, seed, cz));
-			chunk = new BiomeChunk(random, picker);
+			chunk = new BiomeChunk(random, picker, cx, cz);
 			chunks.put(pos, chunk);
 		}
 		return chunk;
