@@ -28,8 +28,8 @@ public class BiomeChunk {
 			Arrays.fill(buffer, null);
 		}
 		
-		int sx = cx << SIDE_PRE_MASK;
-		int sz = cz << SIDE_PRE_MASK;
+		int sx = cx << SIDE_OFFSET;
+		int sz = cz << SIDE_OFFSET;
 		for (byte index = 0; index < SIZE_PRE; index++) {
 			byte px = (byte) (index >> SIDE_PRE_OFFSET);
 			byte pz = (byte) (index & SIDE_PRE_MASK);

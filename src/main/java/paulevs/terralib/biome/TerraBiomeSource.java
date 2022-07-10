@@ -9,6 +9,11 @@ import paulevs.bhcore.storage.vector.Vec3F;
 import paulevs.terralib.sdf.MixSDF;
 import paulevs.terralib.sdf.TerrainSDF;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,5 +110,25 @@ public abstract class TerraBiomeSource  extends BiomeSource {
 			temperatures[index] = getTerraBiome(px, pz).getTemperature();
 		}
 		return temperatures;
+	}
+	
+	protected void buildDebugMap(int scale) {
+		BufferedImage img = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+		int[] data = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+		
+		int index = 0;
+		for (int x = 0; x < 512; x++) {
+			for (int z = 0; z < 512; z++) {
+				data[index++] = getBiome((x - 256) * scale, (z - 256) * scale).grassColor | 255 << 24;
+			}
+		}
+		
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(new JLabel(new ImageIcon(img)));
+		frame.setResizable(false);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
 }
