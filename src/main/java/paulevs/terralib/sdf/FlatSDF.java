@@ -1,7 +1,7 @@
 package paulevs.terralib.sdf;
 
 public class FlatSDF extends HeightSDF {
-	private int height;
+	protected int height;
 	
 	public FlatSDF setHeight(int height) {
 		this.height = height;

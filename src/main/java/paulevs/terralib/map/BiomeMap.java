@@ -18,7 +18,7 @@ public class BiomeMap {
 	private static final float[] EDGE_CIRCLE_X;
 	private static final float[] EDGE_CIRCLE_Z;
 	
-	private final Map<ChunkPos, BiomeChunk> chunks = Maps.newConcurrentMap();
+	private final Map<Vec2I, BiomeChunk> chunks = Maps.newConcurrentMap();
 	private final BiomePicker picker;
 	
 	private final OpenSimplexNoise[] noises = new OpenSimplexNoise[2];
@@ -68,7 +68,7 @@ public class BiomeMap {
 	}
 	
 	public BiomeChunk getChunk(final int cx, final int cz) {
-		final ChunkPos pos = new ChunkPos(cx, cz);
+		final Vec2I pos = new Vec2I(cx, cz);
 		BiomeChunk chunk = chunks.get(pos);
 		if (chunk == null) {
 			Random random = new Random(MathHelper.hashCode(cx, seed, cz));
