@@ -4,11 +4,13 @@ import paulevs.terralib.TerraLib;
 import paulevs.terralib.map.BiomePicker;
 import paulevs.terralib.sdf.FlatSDF;
 import paulevs.terralib.sdf.MaxSDF;
-import paulevs.terralib.sdf.SpheresSDF;
+import paulevs.terralib.sdf.TerrainSDF;
+import paulevs.terralib.sdf.VanillaTerrainSDF;
 
 public class OverworldBiomes {
 	public static final BiomePicker OCEAN_PICKER = new BiomePicker();
 	public static final BiomePicker LAND_PICKER = new BiomePicker();
+	public static final TerrainSDF OVERWORLD_GEN;
 	
 	public static final TerraBiome OCEAN = new TerraBiome(TerraLib.id("ocean")).setTemperature(0.5F).setGrassColor(0xFF00FF).setTerrainSDF(new FlatSDF().setHeight(32));
 	
@@ -21,25 +23,12 @@ public class OverworldBiomes {
 	}
 	
 	static {
-		addLandBiome(VanillaBiomes.RAINFOREST, 1.0F);
-		addLandBiome(VanillaBiomes.SWAMPLAND, 1.0F);
-		addLandBiome(VanillaBiomes.SEASONAL_FOREST, 1.0F);
-		addLandBiome(VanillaBiomes.FOREST, 1.0F);
-		addLandBiome(VanillaBiomes.SAVANNA, 1.0F);
-		addLandBiome(VanillaBiomes.SHRUBLAND, 1.0F);
-		addLandBiome(VanillaBiomes.TAIGA, 1.0F);
-		addLandBiome(VanillaBiomes.DESERT, 1.0F);
-		addLandBiome(VanillaBiomes.PLAINS, 1.0F);
-		addLandBiome(VanillaBiomes.ICE_DESERT, 1.0F);
-		addLandBiome(VanillaBiomes.TUNDRA, 1.0F);
+		OVERWORLD_GEN = new MaxSDF().setA(new VanillaTerrainSDF()).setB(new FlatSDF().setHeight(62));
 		
-		MaxSDF sdf = new MaxSDF().setA(new FlatSDF().setHeight(70)).setB(new SpheresSDF().setRadius(0.3F).setDistance(32));
-		VanillaBiomes.RAINFOREST.setTerrainSDF(sdf);
-		VanillaBiomes.SWAMPLAND.setTerrainSDF(sdf);
-		VanillaBiomes.SEASONAL_FOREST.setTerrainSDF(sdf);
-		VanillaBiomes.FOREST.setTerrainSDF(sdf);
-		VanillaBiomes.PLAINS.setTerrainSDF(sdf);
-		VanillaBiomes.DESERT.setTerrainSDF(new FlatSDF().setHeight(80));
+		VanillaBiomes.OVERWORLD_BIOMES.forEach(biome -> {
+			biome.setTerrainSDF(OVERWORLD_GEN);
+			addLandBiome(biome, 1.0F);
+		});
 		
 		addOceanBiome(OCEAN, 1.0F);
 	}

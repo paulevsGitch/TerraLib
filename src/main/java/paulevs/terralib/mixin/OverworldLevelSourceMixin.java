@@ -5,7 +5,6 @@ import net.minecraft.level.Level;
 import net.minecraft.level.biome.BaseBiome;
 import net.minecraft.level.chunk.Chunk;
 import net.minecraft.level.source.OverworldLevelSource;
-import net.minecraft.util.noise.PerlinOctaveNoise;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.BlockStateHolder;
 import net.modificationstation.stationapi.impl.level.HeightLimitView;
@@ -30,7 +29,6 @@ import java.util.stream.IntStream;
 
 @Mixin(OverworldLevelSource.class)
 public class OverworldLevelSourceMixin {
-	@Shadow	private PerlinOctaveNoise interpolationNoise;
 	@Shadow private Level level;
 	
 	@Unique private ForkJoinPool customPool = new ForkJoinPool(8);
@@ -71,6 +69,7 @@ public class OverworldLevelSourceMixin {
 		BlockState dirt = ((BlockStateHolder) BaseBlock.DIRT).getDefaultState();
 		BlockState stone = ((BlockStateHolder) BaseBlock.STONE).getDefaultState();
 		BlockState grass = ((BlockStateHolder) BaseBlock.GRASS).getDefaultState();
+		BlockState water = ((BlockStateHolder) BaseBlock.STILL_WATER).getDefaultState();
 		
 		customPool.submit(() -> IntStream.range(minSection, maxSection).parallel().forEach(n -> {
 			ChunkSection section = sections[n];
@@ -118,7 +117,6 @@ public class OverworldLevelSourceMixin {
 						
 						c = MathUtil.lerp(a, b, dy);
 						
-						//if (a > 0) section.setBlockState(x, y, z, stone);
 						if (c > 0) {
 							c = MathUtil.lerp(a, b, dy + 0.25F);
 							if (c > 0) {
@@ -129,28 +127,13 @@ public class OverworldLevelSourceMixin {
 								section.setBlockState(x, y, z, grass);
 							}
 						}
+						else if (py < 62) section.setBlockState(x, y, z, water);
 					}
 				}
 			}
 			
 			if (section.isEmpty()) sections[n] = null;
 		}));
-		
-		/*customPool.submit(() -> IntStream.range(minSection, maxSection).parallel().forEach(n -> {
-			ChunkSection section = sections[n];
-			if (section != null) {
-				ChunkSection below = n > minSection ? sections[n - 1] : null;
-				for (byte x = 0; x < 16; x++) {
-					for (byte z = 0; z < 16; z++) {
-						for (byte y = 0; y < 16; y++) {
-							if (section.getBlockState(x, y, z) == stone) {
-							
-							}
-						}
-					}
-				}
-			}
-		}));*/
 	}
 	
 	@Inject(method = "shapeChunk(II[B[Lnet/minecraft/level/biome/BaseBiome;[D)V", at = @At("HEAD"), cancellable = true)

@@ -1,9 +1,6 @@
 package paulevs.terralib.sdf;
 
-import net.minecraft.level.Level;
-import paulevs.bhcore.storage.vector.Vec3I;
-
-public class FlatSDF extends TerrainSDF {
+public class FlatSDF extends HeightSDF {
 	private int height;
 	
 	public FlatSDF setHeight(int height) {
@@ -12,7 +9,7 @@ public class FlatSDF extends TerrainSDF {
 	}
 	
 	@Override
-	public float getDensity(Level level, Vec3I pos) {
-		return (height - pos.y) * 0.0625F;
+	protected float getHeight(int x, int z) {
+		return height;
 	}
 }
